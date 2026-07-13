@@ -13,22 +13,22 @@ Start here:
 ## Layout
 ```
 backend/   FastAPI app + matching logic (Search Engine module)
-frontend/  React (Vite) UI
+frontend/  Gradio UI (Python)
 data/      Static seed dataset used as the "database" for the MVP
 ```
 
-## Quickstart (once your skill's stub is filled in)
+## Quickstart
 
-Backend:
+Backend (start first, listens on port 8000):
 ```
 cd backend
 pip install -r requirements.txt
 uvicorn app:app --reload --port 8000
 ```
 
-Frontend:
+Frontend (Gradio, calls the backend over HTTP):
 ```
 cd frontend
-npm install
-npm run dev
+pip install -r requirements.txt
+python app.py
 ```

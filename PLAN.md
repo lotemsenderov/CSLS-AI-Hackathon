@@ -7,7 +7,7 @@ conferences, split into two modules: **Search Engine (Logic)** and
 parallel via Git branches.
 
 Decisions:
-- Stack: **Python (FastAPI)** backend, **React (Vite)** frontend.
+- Stack: **Python (FastAPI)** backend, **Python (Gradio)** frontend.
 - Matching: hybrid — exact/keyword filter on a broad-field dropdown, then a
   **TF-IDF + cosine similarity** re-rank of free text against conference
   descriptions. This is the practical stand-in for "semantic" matching
@@ -20,11 +20,10 @@ Decisions:
 ## Architecture
 
 ```
-frontend/ (React + Vite)
-  SearchForm → GET http://localhost:8000/search?field=..&query=..
-  ResultsList (client-side sort/filter by date, location)
+frontend/ (Gradio, Python)
+  app.py → GET http://localhost:8000/search?field=..&query=..
         |
-        v  JSON over REST (CORS enabled)
+        v  JSON over REST
 backend/ (FastAPI)
   /fields   -> returns the dropdown taxonomy (shared contract with UI)
   /search   -> field filter + TF-IDF cosine rank over data/conferences.json

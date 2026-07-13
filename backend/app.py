@@ -25,5 +25,4 @@ def get_fields():
 
 @app.get("/search")
 def search(field: str | None = None, query: str | None = None):
-    # TODO: call search_conferences(field, query) and return {"results": [...]}
-    raise NotImplementedError
+    return {"results": search_conferences(field, query)}

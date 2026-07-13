@@ -25,15 +25,12 @@ matching functions) — split further only if you have 4+ people.
 
 | # | Skill | Owns | Branch |
 |---|-------|------|--------|
-| 1 | **Search Input Form** — dropdown (bound to Field Taxonomy via `GET /fields`) + free-text box, submit handling. | `frontend/src/components/SearchForm.jsx` | `feature/frontend-ui` |
-| 2 | **Results Display** — renders the conference list/cards returned by `/search`. | `frontend/src/components/ResultsList.jsx` | `feature/frontend-ui` |
-| 3 | **Filter & Sort Controls** — client-side sort/filter of the already-fetched results by date and location. | `frontend/src/components/ResultsList.jsx` | `feature/frontend-ui` |
-| 4 | **API Client** — fetch wrapper for `/fields` and `/search`, loading/error states. | `frontend/src/api.js` | `feature/frontend-ui` |
-| 5 | **Styling/Layout** — page shell, basic responsive layout. Lowest priority under time pressure — do last if time allows. | `frontend/src/App.jsx`, CSS | `feature/frontend-ui` |
+| 1 | **Search Input Form** — dropdown (bound to Field Taxonomy via `GET /fields`) + free-text box, submit handling. | `frontend/app.py` | `feature/frontend-ui` |
+| 2 | **Results Display** — renders the conference list/cards returned by `/search`. | `frontend/app.py` | `feature/frontend-ui` |
+| 3 | **API Client** — `requests` calls to `/fields` and `/search`, error handling. | `frontend/app.py` | `feature/frontend-ui` |
 
-All 5 UI skills live on one branch (`feature/frontend-ui`) since they're
-tightly coupled files in a small app — split into per-component branches
-only if you have 2+ people free for frontend.
+The UI is a single-file Gradio app (`frontend/app.py`) — small enough for
+one person/branch.
 
 ## Suggested assignment for a 4-person team
 - **Person A:** Search skills 1-2 (Data Schema, Field Taxonomy)
