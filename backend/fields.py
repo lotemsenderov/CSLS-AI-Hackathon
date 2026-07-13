@@ -3,6 +3,7 @@
 
 FIELDS = [
     "Biophysics",
+    "Computational Biology",
     "Machine Learning",
     "Chemistry",
     "Neuroscience",

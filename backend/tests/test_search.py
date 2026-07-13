@@ -145,3 +145,14 @@ def test_load_conferences_schema_and_uniqueness():
     assert len(ids) == len(set(ids)), "duplicate conference ids in data file"
     for c in conferences:
         assert REQUIRED_KEYS <= c.keys()
+
+
+def test_every_data_field_is_in_the_taxonomy():
+    """A conference with a `field` value not in fields.FIELDS would be
+    unreachable from the UI dropdown filter, since /fields only offers
+    values from that list."""
+    from fields import FIELDS
+
+    conferences = search.load_conferences()
+    used_fields = {c["field"] for c in conferences}
+    assert used_fields <= set(FIELDS)
