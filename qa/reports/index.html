@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Conference Finder — QA Dashboard</title>
+<style>
+:root {
+  --page:            #f9f9f7;
+  --surface:          #fcfcfb;
+  --text-primary:     #0b0b0b;
+  --text-secondary:   #52514e;
+  --muted:            #898781;
+  --gridline:         #e1e0d9;
+  --baseline:         #c3c2b7;
+  --border:           rgba(11,11,11,0.10);
+  --series-1: #2a78d6; --series-2: #1baf7a; --series-3: #eda100; --series-4: #008300;
+  --series-5: #4a3aa7; --series-6: #e34948; --series-7: #e87ba4; --series-8: #eb6834;
+  --good: #0ca30c; --warning: #fab219; --serious: #ec835a; --critical: #d03b3b;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page:            #0d0d0d;
+    --surface:          #1a1a19;
+    --text-primary:     #ffffff;
+    --text-secondary:   #c3c2b7;
+    --muted:            #898781;
+    --gridline:         #2c2c2a;
+    --baseline:         #383835;
+    --border:           rgba(255,255,255,0.10);
+    --series-1: #3987e5; --series-2: #199e70; --series-3: #c98500; --series-4: #008300;
+    --series-5: #9085e9; --series-6: #e66767; --series-7: #d55181; --series-8: #d95926;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 32px 24px 64px;
+  background: var(--page); color: var(--text-primary);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+.wrap { max-width: 980px; margin: 0 auto; }
+h1 { font-size: 26px; margin: 0 0 4px; }
+h2 { font-size: 17px; margin: 0 0 4px; }
+.subtitle { color: var(--text-secondary); margin: 0 0 28px; }
+.section {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  padding: 20px 24px; margin-bottom: 20px;
+}
+.section__subtitle { color: var(--text-secondary); font-size: 13px; margin: 0 0 16px; }
+.stat-row { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; }
+.stat-tile {
+  flex: 1 1 160px; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 18px;
+}
+.stat-tile__label { color: var(--text-secondary); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+.stat-tile__value { font-size: 28px; font-weight: 600; margin-top: 4px; font-variant-numeric: tabular-nums; }
+.stat-tile__sub { color: var(--muted); font-size: 12px; margin-top: 2px; }
+.stat-tile--good .stat-tile__value { color: var(--good); }
+.stat-tile--warning .stat-tile__value { color: #b8790a; }
+.stat-tile--critical .stat-tile__value { color: var(--critical); }
+@media (prefers-color-scheme: dark) {
+  .stat-tile--warning .stat-tile__value { color: var(--warning); }
+}
+.bar-chart { display: flex; flex-direction: column; gap: 6px; }
+.bar-row { display: grid; grid-template-columns: 220px 1fr 56px; align-items: center; gap: 10px; }
+.bar-row__label { color: var(--text-secondary); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar-row__track { background: var(--gridline); border-radius: 4px; height: 12px; overflow: hidden; }
+.bar-row__fill { height: 100%; border-radius: 4px; min-width: 2px; }
+.bar-row__value { font-size: 12px; color: var(--text-secondary); text-align: right; font-variant-numeric: tabular-nums; }
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--gridline); }
+th { color: var(--text-secondary); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .03em; }
+td { font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+footer { color: var(--muted); font-size: 12px; margin-top: 24px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Conference Finder — QA Dashboard</h1>
+    <p class="subtitle">Generated 2026-07-13 08:37 UTC &middot; run <code>python qa/run_all.py</code> to regenerate</p>
+    <div class="stat-row">
+    <div class="stat-tile stat-tile--warning">
+      <div class="stat-tile__label">Overall score</div>
+      <div class="stat-tile__value">88%</div>
+      
+    </div>
+    <div class="stat-tile stat-tile--good">
+      <div class="stat-tile__label">Unit tests</div>
+      <div class="stat-tile__value">33/35</div>
+      <div class="stat-tile__sub">passed</div>
+    </div>
+    <div class="stat-tile stat-tile--warning">
+      <div class="stat-tile__label">Relevance score</div>
+      <div class="stat-tile__value">73%</div>
+      
+    </div>
+    <div class="stat-tile stat-tile--good">
+      <div class="stat-tile__label">Data integrity</div>
+      <div class="stat-tile__value">97%</div>
+      
+    </div></div>
+    <section class="section">
+      <h2>Module correctness (pytest)</h2>
+      <p class="section__subtitle">backend/fields.py, search.py, app.py, and frontend/app.py logic — run via qa/unit/</p>
+      <div class="bar-chart">
+        <div class="bar-row" title="test_api: 10 passed, 0 failed">
+          <div class="bar-row__label">test_api</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:100.00%; background:var(--good);"></div>
+          </div>
+          <div class="bar-row__value">100%</div>
+        </div>
+        <div class="bar-row" title="test_data_integrity: 4 passed, 2 failed">
+          <div class="bar-row__label">test_data_integrity</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:66.67%; background:var(--critical);"></div>
+          </div>
+          <div class="bar-row__value">67%</div>
+        </div>
+        <div class="bar-row" title="test_fields: 3 passed, 0 failed">
+          <div class="bar-row__label">test_fields</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:100.00%; background:var(--good);"></div>
+          </div>
+          <div class="bar-row__value">100%</div>
+        </div>
+        <div class="bar-row" title="test_frontend_logic: 16 passed, 0 failed">
+          <div class="bar-row__label">test_frontend_logic</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:100.00%; background:var(--good);"></div>
+          </div>
+          <div class="bar-row__value">100%</div>
+        </div></div><h3 style='font-size:13px;color:var(--critical);margin:16px 0 8px;'>Failures</h3><div class="table-wrap"><table><thead><tr><th>Test</th><th>Message</th></tr></thead><tbody><tr><td>test_data_integrity::test_dates_are_valid_and_ordered</td><td>AssertionError: conferences with invalid/out-of-order dates: [&#x27;scraped-wacv25_2&#x27;, &#x27;scraped-wacv25&#x27;, &#x27;scraped-icassp25&#x27;, &#x27;scraped-www23&#x27;, &#x27;scraped-cvpr23&#x27;]</td></tr><tr><td>test_data_integrity::test_urls_use_http_scheme</td><td>AssertionError: conferences with non-http url: [&#x27;scraped-AI4science22&#x27;]</td></tr></tbody></table></div>
+    </section>
+    <section class="section">
+      <h2>Search relevance (backend/search.py)</h2>
+      <p class="section__subtitle">Scored against qa/evaluation/gold_queries.py — hand-written paraphrases, not literal substrings</p>
+      <div class="stat-row">
+    <div class="stat-tile">
+      <div class="stat-tile__label">Rare-field precision@5</div>
+      <div class="stat-tile__value">65%</div>
+      
+    </div>
+    <div class="stat-tile">
+      <div class="stat-tile__label">Rare-field MRR</div>
+      <div class="stat-tile__value">0.94</div>
+      
+    </div>
+    <div class="stat-tile">
+      <div class="stat-tile__label">ML keyword hit rate</div>
+      <div class="stat-tile__value">60%</div>
+      
+    </div>
+    <div class="stat-tile">
+      <div class="stat-tile__label">Score discrimination</div>
+      <div class="stat-tile__value">0.48</div>
+      
+    </div></div><h3 style='font-size:13px;color:var(--text-secondary);margin:16px 0 8px;'>Rare-field queries (precision@5) &mdash; strong signal, base rate is low</h3><div class="bar-chart">
+        <div class="bar-row" title="I study how proteins fold and interact with cell membranes -&gt; expects Biophysics; top1: Cold Spring Harbor Laboratory Meeting: Single Cell Analyses (precision@5=0.2, MRR=0.20)">
+          <div class="bar-row__label">I study how proteins fold and interact w</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:20.00%; background:var(--series-1);"></div>
+          </div>
+          <div class="bar-row__value">20%</div>
+        </div>
+        <div class="bar-row" title="using cryo-electron microscopy to resolve ion channel structures -&gt; expects Biophysics; top1: Biophysical Society Annual Meeting (precision@5=1.0, MRR=1.00)">
+          <div class="bar-row__label">using cryo-electron microscopy to resolv</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:100.00%; background:var(--series-1);"></div>
+          </div>
+          <div class="bar-row__value">100%</div>
+        </div>
+        <div class="bar-row" title="molecular motors, ATP synthase, and enzyme kinetics -&gt; expects Biophysics; top1: Gordon Research Conference on Biophysics of Macromolecular Machines (precision@5=0.6, MRR=1.00)">
+          <div class="bar-row__label">molecular motors, ATP synthase, and enzy</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:60.00%; background:var(--series-1);"></div>
+          </div>
+          <div class="bar-row__value">60%</div>
+        </div>
+        <div class="bar-row" title="NMR spectroscopy of protein-protein interactions -&gt; expects Biophysics; top1: European Biophysics Congress (precision@5=0.8, MRR=1.00)">
+          <div class="bar-row__label">NMR spectroscopy of protein-protein inte</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:80.00%; background:var(--series-1);"></div>
+          </div>
+          <div class="bar-row__value">80%</div>
+        </div>
+        <div class="bar-row" title="single-molecule FRET and optical tweezers imaging -&gt; expects Biophysics; top1: Single Molecule Biophysics Workshop (precision@5=0.6, MRR=1.00)">
+          <div class="bar-row__label">single-molecule FRET and optical tweezer</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:60.00%; background:var(--series-1);"></div>
+          </div>
+          <div class="bar-row__value">60%</div>
+        </div>
+        <div class="bar-row" title="using X-ray crystallography to determine macromolecular structures -&gt; expects Biophysics; top1: CCP4 Study Weekend (precision@5=1.0, MRR=1.00)">
+          <div class="bar-row__label">using X-ray crystallography to determine</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:100.00%; background:var(--series-1);"></div>
+          </div>
+          <div class="bar-row__value">100%</div>
+        </div>
+        <div class="bar-row" title="genome assembly and sequence alignment algorithms in bioinformatics -&gt; expects Computational Biology; top1: WABI (Workshop on Algorithms in Bioinformatics) (precision@5=0.8, MRR=1.00)">
+          <div class="bar-row__label">genome assembly and sequence alignment a</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:80.00%; background:var(--series-2);"></div>
+          </div>
+          <div class="bar-row__value">80%</div>
+        </div>
+        <div class="bar-row" title="network models and gene regulatory systems in quantitative biology -&gt; expects Computational Biology; top1: International Conference on Systems Biology (ICSB) (precision@5=1.0, MRR=1.00)">
+          <div class="bar-row__label">network models and gene regulatory syste</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:100.00%; background:var(--series-2);"></div>
+          </div>
+          <div class="bar-row__value">100%</div>
+        </div>
+        <div class="bar-row" title="profiling gene expression in individual cells at scale -&gt; expects Computational Biology; top1: Electrochemical Society Meeting (precision@5=0.4, MRR=0.50)">
+          <div class="bar-row__label">profiling gene expression in individual </div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:40.00%; background:var(--series-2);"></div>
+          </div>
+          <div class="bar-row__value">40%</div>
+        </div>
+        <div class="bar-row" title="mapping gene expression patterns across tissue sections in situ -&gt; expects Computational Biology; top1: EMBL Conference: Spatial &#x27;Omics (precision@5=1.0, MRR=1.00)">
+          <div class="bar-row__label">mapping gene expression patterns across </div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:100.00%; background:var(--series-2);"></div>
+          </div>
+          <div class="bar-row__value">100%</div>
+        </div>
+        <div class="bar-row" title="using a blood test to detect circulating tumor DNA noninvasively -&gt; expects Computational Biology; top1: AACR Special Conference: Liquid Biopsy — From Discovery to Clinical Implementation (precision@5=1.0, MRR=1.00)">
+          <div class="bar-row__label">using a blood test to detect circulating</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:100.00%; background:var(--series-2);"></div>
+          </div>
+          <div class="bar-row__value">100%</div>
+        </div>
+        <div class="bar-row" title="organic synthesis and catalysis for making new materials -&gt; expects Chemistry; top1: American Chemical Society National Meeting (precision@5=0.8, MRR=1.00)">
+          <div class="bar-row__label">organic synthesis and catalysis for maki</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:80.00%; background:var(--series-4);"></div>
+          </div>
+          <div class="bar-row__value">80%</div>
+        </div>
+        <div class="bar-row" title="sustainable green chemistry using renewable feedstocks -&gt; expects Chemistry; top1: International Symposium on Green Chemistry (precision@5=0.8, MRR=1.00)">
+          <div class="bar-row__label">sustainable green chemistry using renewa</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:80.00%; background:var(--series-4);"></div>
+          </div>
+          <div class="bar-row__value">80%</div>
+        </div>
+        <div class="bar-row" title="computational modeling of reaction mechanisms and kinetics -&gt; expects Chemistry; top1: Gordon Research Conference on Physical Organic Chemistry (precision@5=0.2, MRR=1.00)">
+          <div class="bar-row__label">computational modeling of reaction mecha</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:20.00%; background:var(--series-4);"></div>
+          </div>
+          <div class="bar-row__value">20%</div>
+        </div>
+        <div class="bar-row" title="nanomaterials for energy storage and self-assembly -&gt; expects Chemistry; top1: International Conference on Materials Chemistry (precision@5=0.2, MRR=1.00)">
+          <div class="bar-row__label">nanomaterials for energy storage and sel</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:20.00%; background:var(--series-4);"></div>
+          </div>
+          <div class="bar-row__value">20%</div>
+        </div>
+        <div class="bar-row" title="battery materials and electrocatalysis for fuel cells -&gt; expects Chemistry; top1: Electrochemical Society Meeting (precision@5=0.6, MRR=1.00)">
+          <div class="bar-row__label">battery materials and electrocatalysis f</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:60.00%; background:var(--series-4);"></div>
+          </div>
+          <div class="bar-row__value">60%</div>
+        </div>
+        <div class="bar-row" title="synaptic plasticity and how neural circuits rewire -&gt; expects Neuroscience; top1: Society for Neuroscience Annual Meeting (precision@5=0.6, MRR=1.00)">
+          <div class="bar-row__label">synaptic plasticity and how neural circu</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:60.00%; background:var(--series-5);"></div>
+          </div>
+          <div class="bar-row__value">60%</div>
+        </div>
+        <div class="bar-row" title="computational models of neurodevelopment and glial cells -&gt; expects Neuroscience; top1: Federation of European Neuroscience Societies Forum (precision@5=0.2, MRR=1.00)">
+          <div class="bar-row__label">computational models of neurodevelopment</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:20.00%; background:var(--series-5);"></div>
+          </div>
+          <div class="bar-row__value">20%</div>
+        </div>
+        <div class="bar-row" title="fMRI studies of memory and decision making in the brain -&gt; expects Neuroscience; top1: Cognitive Neuroscience Society Annual Meeting (precision@5=0.8, MRR=1.00)">
+          <div class="bar-row__label">fMRI studies of memory and decision maki</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:80.00%; background:var(--series-5);"></div>
+          </div>
+          <div class="bar-row__value">80%</div>
+        </div>
+        <div class="bar-row" title="spiking neural network models of brain circuits -&gt; expects Neuroscience; top1: International Conference on Computational Neuroscience (precision@5=0.6, MRR=1.00)">
+          <div class="bar-row__label">spiking neural network models of brain c</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:60.00%; background:var(--series-5);"></div>
+          </div>
+          <div class="bar-row__value">60%</div>
+        </div>
+        <div class="bar-row" title="Alzheimer&#x27;s disease biomarkers and neurodegeneration -&gt; expects Neuroscience; top1: Alzheimer&#x27;s Association International Conference (precision@5=0.4, MRR=1.00)">
+          <div class="bar-row__label">Alzheimer&#x27;s disease biomarkers and neuro</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:40.00%; background:var(--series-5);"></div>
+          </div>
+          <div class="bar-row__value">40%</div>
+        </div></div><h3 style='font-size:13px;color:var(--text-secondary);margin:16px 0 8px;'>ML subfield queries (top-1 keyword hit) &mdash; field-match alone is a weak signal here</h3><div class="bar-chart">
+        <div class="bar-row" title="object detection and image recognition with deep networks -&gt; top1: NeurIPS (keyword hit: False)">
+          <div class="bar-row__label">object detection and image recognition w</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:0.00%; background:var(--series-3);"></div>
+          </div>
+          <div class="bar-row__value">miss</div>
+        </div>
+        <div class="bar-row" title="natural language processing for text understanding -&gt; top1: EMNLP 2021 (keyword hit: True)">
+          <div class="bar-row__label">natural language processing for text und</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:100.00%; background:var(--series-3);"></div>
+          </div>
+          <div class="bar-row__value">hit</div>
+        </div>
+        <div class="bar-row" title="autonomous robot navigation and manipulation -&gt; top1: International Conference on Biophysics (keyword hit: False)">
+          <div class="bar-row__label">autonomous robot navigation and manipula</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:0.00%; background:var(--series-3);"></div>
+          </div>
+          <div class="bar-row__value">miss</div>
+        </div>
+        <div class="bar-row" title="mining large datasets to find patterns -&gt; top1: CIKM 2021 (keyword hit: True)">
+          <div class="bar-row__label">mining large datasets to find patterns</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:100.00%; background:var(--series-3);"></div>
+          </div>
+          <div class="bar-row__value">hit</div>
+        </div>
+        <div class="bar-row" title="speech and audio signal processing -&gt; top1: ICASSP 2025 (keyword hit: True)">
+          <div class="bar-row__label">speech and audio signal processing</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:100.00%; background:var(--series-3);"></div>
+          </div>
+          <div class="bar-row__value">hit</div>
+        </div></div><h3 style='font-size:13px;color:var(--text-secondary);margin:16px 0 8px;'>TF-IDF score distribution across all gold queries</h3><div class="bar-chart">
+        <div class="bar-row" title="score 0.00–0.10: 5976 conference(s)">
+          <div class="bar-row__label">0.00–0.10</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:100.00%; background:var(--series-1);"></div>
+          </div>
+          <div class="bar-row__value">5976</div>
+        </div>
+        <div class="bar-row" title="score 0.10–0.20: 120 conference(s)">
+          <div class="bar-row__label">0.10–0.20</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:2.01%; background:var(--series-1);"></div>
+          </div>
+          <div class="bar-row__value">120</div>
+        </div>
+        <div class="bar-row" title="score 0.20–0.30: 25 conference(s)">
+          <div class="bar-row__label">0.20–0.30</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:0.42%; background:var(--series-1);"></div>
+          </div>
+          <div class="bar-row__value">25</div>
+        </div>
+        <div class="bar-row" title="score 0.30–0.40: 24 conference(s)">
+          <div class="bar-row__label">0.30–0.40</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:0.40%; background:var(--series-1);"></div>
+          </div>
+          <div class="bar-row__value">24</div>
+        </div>
+        <div class="bar-row" title="score 0.40–0.50: 4 conference(s)">
+          <div class="bar-row__label">0.40–0.50</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:0.07%; background:var(--series-1);"></div>
+          </div>
+          <div class="bar-row__value">4</div>
+        </div>
+        <div class="bar-row" title="score 0.50–0.60: 2 conference(s)">
+          <div class="bar-row__label">0.50–0.60</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:0.03%; background:var(--series-1);"></div>
+          </div>
+          <div class="bar-row__value">2</div>
+        </div>
+        <div class="bar-row" title="score 0.60–0.70: 6 conference(s)">
+          <div class="bar-row__label">0.60–0.70</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:0.10%; background:var(--series-1);"></div>
+          </div>
+          <div class="bar-row__value">6</div>
+        </div>
+        <div class="bar-row" title="score 0.70–0.80: 4 conference(s)">
+          <div class="bar-row__label">0.70–0.80</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:0.07%; background:var(--series-1);"></div>
+          </div>
+          <div class="bar-row__value">4</div>
+        </div>
+        <div class="bar-row" title="score 0.80–0.90: 1 conference(s)">
+          <div class="bar-row__label">0.80–0.90</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:0.02%; background:var(--series-1);"></div>
+          </div>
+          <div class="bar-row__value">1</div>
+        </div>
+        <div class="bar-row" title="score 0.90–1.00: 0 conference(s)">
+          <div class="bar-row__label">0.90–1.00</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:0.00%; background:var(--series-1);"></div>
+          </div>
+          <div class="bar-row__value">0</div>
+        </div></div>
+    </section>
+    <section class="section">
+      <h2>Dataset integrity (data/conferences.json)</h2>
+      <p class="section__subtitle">Structural checks over the current dataset, plus the field-balance shape</p>
+      <div class="stat-row">
+    <div class="stat-tile">
+      <div class="stat-tile__label">Total conferences</div>
+      <div class="stat-tile__value">237</div>
+      
+    </div>
+    <div class="stat-tile stat-tile--good">
+      <div class="stat-tile__label">Duplicate ids</div>
+      <div class="stat-tile__value">0</div>
+      
+    </div>
+    <div class="stat-tile stat-tile--critical">
+      <div class="stat-tile__label">Invalid dates</div>
+      <div class="stat-tile__value">5</div>
+      
+    </div>
+    <div class="stat-tile stat-tile--critical">
+      <div class="stat-tile__label">Invalid urls</div>
+      <div class="stat-tile__value">1</div>
+      
+    </div>
+    <div class="stat-tile stat-tile--warning">
+      <div class="stat-tile__label">Largest field share</div>
+      <div class="stat-tile__value">80%</div>
+      <div class="stat-tile__sub">Machine Learning</div>
+    </div></div><h3 style='font-size:13px;color:var(--text-secondary);margin:16px 0 8px;'>Conferences per field</h3><div class="bar-chart">
+        <div class="bar-row" title="Machine Learning: 190">
+          <div class="bar-row__label">Machine Learning</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:100.00%; background:var(--series-3);"></div>
+          </div>
+          <div class="bar-row__value">190</div>
+        </div>
+        <div class="bar-row" title="Computational Biology: 25">
+          <div class="bar-row__label">Computational Biology</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:13.16%; background:var(--series-2);"></div>
+          </div>
+          <div class="bar-row__value">25</div>
+        </div>
+        <div class="bar-row" title="Biophysics: 12">
+          <div class="bar-row__label">Biophysics</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:6.32%; background:var(--series-1);"></div>
+          </div>
+          <div class="bar-row__value">12</div>
+        </div>
+        <div class="bar-row" title="Chemistry: 5">
+          <div class="bar-row__label">Chemistry</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:2.63%; background:var(--series-4);"></div>
+          </div>
+          <div class="bar-row__value">5</div>
+        </div>
+        <div class="bar-row" title="Neuroscience: 5">
+          <div class="bar-row__label">Neuroscience</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:2.63%; background:var(--series-5);"></div>
+          </div>
+          <div class="bar-row__value">5</div>
+        </div></div><h3 style='font-size:13px;color:var(--text-secondary);margin:16px 0 8px;'>Topics text length (words)</h3><div class="bar-chart">
+        <div class="bar-row" title="score 0.00–5.00: 76 conference(s)">
+          <div class="bar-row__label">0.00–5.00</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:83.52%; background:var(--series-1);"></div>
+          </div>
+          <div class="bar-row__value">76</div>
+        </div>
+        <div class="bar-row" title="score 5.00–10.00: 40 conference(s)">
+          <div class="bar-row__label">5.00–10.00</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:43.96%; background:var(--series-1);"></div>
+          </div>
+          <div class="bar-row__value">40</div>
+        </div>
+        <div class="bar-row" title="score 10.00–15.00: 91 conference(s)">
+          <div class="bar-row__label">10.00–15.00</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:100.00%; background:var(--series-1);"></div>
+          </div>
+          <div class="bar-row__value">91</div>
+        </div>
+        <div class="bar-row" title="score 15.00–20.00: 13 conference(s)">
+          <div class="bar-row__label">15.00–20.00</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:14.29%; background:var(--series-1);"></div>
+          </div>
+          <div class="bar-row__value">13</div>
+        </div>
+        <div class="bar-row" title="score 20.00–25.00: 11 conference(s)">
+          <div class="bar-row__label">20.00–25.00</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:12.09%; background:var(--series-1);"></div>
+          </div>
+          <div class="bar-row__value">11</div>
+        </div>
+        <div class="bar-row" title="score 25.00–30.00: 2 conference(s)">
+          <div class="bar-row__label">25.00–30.00</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:2.20%; background:var(--series-1);"></div>
+          </div>
+          <div class="bar-row__value">2</div>
+        </div>
+        <div class="bar-row" title="score 30.00–35.00: 3 conference(s)">
+          <div class="bar-row__label">30.00–35.00</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:3.30%; background:var(--series-1);"></div>
+          </div>
+          <div class="bar-row__value">3</div>
+        </div>
+        <div class="bar-row" title="score 35.00–40.00: 1 conference(s)">
+          <div class="bar-row__label">35.00–40.00</div>
+          <div class="bar-row__track">
+            <div class="bar-row__fill " style="width:1.10%; background:var(--series-1);"></div>
+          </div>
+          <div class="bar-row__value">1</div>
+        </div></div><h3 style='font-size:13px;color:var(--critical);margin:16px 0 8px;'>Conferences with invalid/out-of-order dates</h3><div class="table-wrap"><table><thead><tr><th>id</th></tr></thead><tbody><tr><td>scraped-wacv25_2</td></tr><tr><td>scraped-wacv25</td></tr><tr><td>scraped-icassp25</td></tr><tr><td>scraped-www23</td></tr><tr><td>scraped-cvpr23</td></tr></tbody></table></div>
+    </section>
+    <footer>Conference Finder &mdash; qa/ test &amp; evaluation suite</footer>
+  </div>
+</body>
+</html>
