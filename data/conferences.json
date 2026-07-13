@@ -1,0 +1,35 @@
+[
+  {
+    "id": "conf-001",
+    "name": "International Conference on Biophysics",
+    "field": "Biophysics",
+    "topics": "protein folding, membrane dynamics, single-molecule imaging, biomolecular simulation",
+    "location": "Boston, MA, USA",
+    "start_date": "2026-09-14",
+    "end_date": "2026-09-17",
+    "submission_deadline": "2026-06-01",
+    "url": "https://example.org/icb2026"
+  },
+  {
+    "id": "conf-002",
+    "name": "NeurIPS",
+    "field": "Machine Learning",
+    "topics": "deep learning, neural networks, reinforcement learning, generative models, optimization",
+    "location": "Vancouver, Canada",
+    "start_date": "2026-12-06",
+    "end_date": "2026-12-12",
+    "submission_deadline": "2026-05-15",
+    "url": "https://example.org/neurips2026"
+  },
+  {
+    "id": "conf-003",
+    "name": "Society for Neuroscience Annual Meeting",
+    "field": "Neuroscience",
+    "topics": "synaptic plasticity, neural circuits, cognitive neuroscience, brain imaging, neurodegeneration",
+    "location": "Chicago, IL, USA",
+    "start_date": "2026-10-10",
+    "end_date": "2026-10-14",
+    "submission_deadline": "2026-07-01",
+    "url": "https://example.org/sfn2026"
+  }
+]
