@@ -2440,5 +2440,170 @@
     "end_date": "2026-09-17",
     "submission_deadline": "2026-06-01",
     "url": "https://example.org/iscb-africa2026"
+  },
+  {
+    "id": "conf-038",
+    "name": "Single Cell Genomics Conference (SCG)",
+    "field": "Computational Biology",
+    "topics": "single-cell RNA sequencing, scRNA-seq, single-cell genomics, droplet-based sequencing, cell atlases",
+    "location": "Barcelona, Spain",
+    "start_date": "2026-09-15",
+    "end_date": "2026-09-18",
+    "submission_deadline": "2026-06-01",
+    "url": "https://example.org/scgenomics2026"
+  },
+  {
+    "id": "conf-039",
+    "name": "Human Cell Atlas General Meeting",
+    "field": "Computational Biology",
+    "topics": "single-cell RNA sequencing, cell atlases, single-cell transcriptomics, tissue mapping, reference atlases",
+    "location": "Cambridge, UK",
+    "start_date": "2027-03-08",
+    "end_date": "2027-03-11",
+    "submission_deadline": "2026-11-15",
+    "url": "https://example.org/hca-general2027"
+  },
+  {
+    "id": "conf-040",
+    "name": "Keystone Symposium: Single-Cell Biology",
+    "field": "Computational Biology",
+    "topics": "single-cell RNA sequencing, single-cell genomics, single-cell multi-omics, cellular heterogeneity",
+    "location": "Santa Fe, NM, USA",
+    "start_date": "2027-01-24",
+    "end_date": "2027-01-28",
+    "submission_deadline": "2026-10-01",
+    "url": "https://example.org/keystone-singlecell2027"
+  },
+  {
+    "id": "conf-041",
+    "name": "Cold Spring Harbor Laboratory Meeting: Single Cell Analyses",
+    "field": "Computational Biology",
+    "topics": "single-cell RNA sequencing, single-cell genomics, single-cell epigenomics, computational methods for single-cell data",
+    "location": "Cold Spring Harbor, NY, USA",
+    "start_date": "2026-11-03",
+    "end_date": "2026-11-07",
+    "submission_deadline": "2026-08-01",
+    "url": "https://example.org/cshl-singlecell2026"
+  },
+  {
+    "id": "conf-042",
+    "name": "RNA Society Annual Meeting",
+    "field": "Computational Biology",
+    "topics": "single-cell RNA sequencing, RNA biology, single-cell transcriptomics, spatial transcriptomics, RNA processing",
+    "location": "Montreal, Canada",
+    "start_date": "2027-06-01",
+    "end_date": "2027-06-05",
+    "submission_deadline": "2027-02-15",
+    "url": "https://example.org/rnasociety2027"
+  },
+  {
+    "id": "conf-043",
+    "name": "Keystone Symposium: Spatial Omics and Systems Biology of Disease",
+    "field": "Computational Biology",
+    "topics": "spatial transcriptomics, spatial omics, tissue imaging, spatial genomics, systems biology",
+    "location": "Whistler, Canada",
+    "start_date": "2027-02-14",
+    "end_date": "2027-02-18",
+    "submission_deadline": "2026-11-01",
+    "url": "https://example.org/keystone-spatialomics2027"
+  },
+  {
+    "id": "conf-044",
+    "name": "EMBL Conference: Spatial 'Omics",
+    "field": "Computational Biology",
+    "topics": "spatial transcriptomics, spatial omics, in situ sequencing, multiplexed imaging, tissue architecture",
+    "location": "Heidelberg, Germany",
+    "start_date": "2026-10-12",
+    "end_date": "2026-10-15",
+    "submission_deadline": "2026-06-15",
+    "url": "https://example.org/embl-spatialomics2026"
+  },
+  {
+    "id": "conf-045",
+    "name": "CHI Spatial Biology Conference",
+    "field": "Computational Biology",
+    "topics": "spatial transcriptomics, spatial biology, spatial genomics, multiplexed tissue imaging, in situ hybridization",
+    "location": "San Diego, CA, USA",
+    "start_date": "2026-08-24",
+    "end_date": "2026-08-27",
+    "submission_deadline": "2026-05-01",
+    "url": "https://example.org/chi-spatialbiology2026"
+  },
+  {
+    "id": "conf-046",
+    "name": "Festival of Genomics & Biodata (Spatial Genomics Track)",
+    "field": "Computational Biology",
+    "topics": "spatial transcriptomics, spatial genomics, single-cell genomics, genomics, biodata",
+    "location": "London, UK",
+    "start_date": "2027-01-27",
+    "end_date": "2027-01-28",
+    "submission_deadline": "2026-10-01",
+    "url": "https://example.org/festivalofgenomics2027"
+  },
+  {
+    "id": "conf-047",
+    "name": "Spatial Genomics Congress",
+    "field": "Computational Biology",
+    "topics": "spatial transcriptomics, spatial genomics, spatial proteomics, imaging mass cytometry, tissue biology",
+    "location": "Boston, MA, USA",
+    "start_date": "2026-09-29",
+    "end_date": "2026-10-01",
+    "submission_deadline": "2026-06-15",
+    "url": "https://example.org/spatialgenomicscongress2026"
+  },
+  {
+    "id": "conf-048",
+    "name": "AACR Special Conference: Liquid Biopsy \u2014 From Discovery to Clinical Implementation",
+    "field": "Computational Biology",
+    "topics": "cell-free DNA, cfDNA, circulating tumor DNA, ctDNA, liquid biopsy, cancer diagnostics",
+    "location": "San Diego, CA, USA",
+    "start_date": "2027-01-11",
+    "end_date": "2027-01-14",
+    "submission_deadline": "2026-09-15",
+    "url": "https://example.org/aacr-liquidbiopsy2027"
+  },
+  {
+    "id": "conf-049",
+    "name": "International Symposium on Circulating Tumor Cells and Liquid Biopsy (ISCTC)",
+    "field": "Computational Biology",
+    "topics": "cell-free DNA, circulating tumor cells, liquid biopsy, ctDNA, minimal residual disease",
+    "location": "Barcelona, Spain",
+    "start_date": "2026-09-24",
+    "end_date": "2026-09-26",
+    "submission_deadline": "2026-06-01",
+    "url": "https://example.org/isctc2026"
+  },
+  {
+    "id": "conf-050",
+    "name": "Liquid Biopsy Congress Europe",
+    "field": "Computational Biology",
+    "topics": "cell-free DNA, cfDNA, liquid biopsy, ctDNA, circulating biomarkers, precision oncology",
+    "location": "Amsterdam, Netherlands",
+    "start_date": "2026-11-17",
+    "end_date": "2026-11-18",
+    "submission_deadline": "2026-08-01",
+    "url": "https://example.org/liquidbiopsycongress-eu2026"
+  },
+  {
+    "id": "conf-051",
+    "name": "World cfDNA Congress",
+    "field": "Computational Biology",
+    "topics": "cell-free DNA, cfDNA, noninvasive prenatal testing, liquid biopsy, ctDNA, cell-free RNA",
+    "location": "San Francisco, CA, USA",
+    "start_date": "2027-03-22",
+    "end_date": "2027-03-24",
+    "submission_deadline": "2026-12-01",
+    "url": "https://example.org/worldcfdnacongress2027"
+  },
+  {
+    "id": "conf-052",
+    "name": "ASHG Annual Meeting (Cell-Free DNA & Noninvasive Genomics Track)",
+    "field": "Computational Biology",
+    "topics": "cell-free DNA, cfDNA, noninvasive prenatal testing, human genetics, genomics, liquid biopsy",
+    "location": "Los Angeles, CA, USA",
+    "start_date": "2026-10-20",
+    "end_date": "2026-10-24",
+    "submission_deadline": "2026-05-01",
+    "url": "https://example.org/ashg2026"
   }
 ]
