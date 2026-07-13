@@ -12,6 +12,50 @@
   },
   {
     "id": "conf-002",
+    "name": "Biophysical Society Annual Meeting",
+    "field": "Biophysics",
+    "topics": "ion channels, cryo-electron microscopy, molecular motors, membrane biophysics, protein structure",
+    "location": "San Francisco, CA, USA",
+    "start_date": "2027-02-13",
+    "end_date": "2027-02-17",
+    "submission_deadline": "2026-10-01",
+    "url": "https://example.org/bps2027"
+  },
+  {
+    "id": "conf-003",
+    "name": "Gordon Research Conference on Biophysics of Macromolecular Machines",
+    "field": "Biophysics",
+    "topics": "molecular motors, ATP synthase, ribosome dynamics, single-molecule biophysics, enzyme kinetics",
+    "location": "Ventura, CA, USA",
+    "start_date": "2027-01-10",
+    "end_date": "2027-01-15",
+    "submission_deadline": "2026-11-01",
+    "url": "https://example.org/grc-macromolecular2027"
+  },
+  {
+    "id": "conf-004",
+    "name": "European Biophysics Congress",
+    "field": "Biophysics",
+    "topics": "membrane dynamics, biomolecular NMR, protein-protein interactions, computational biophysics",
+    "location": "Vienna, Austria",
+    "start_date": "2026-07-25",
+    "end_date": "2026-07-29",
+    "submission_deadline": "2026-03-15",
+    "url": "https://example.org/ebsa2026"
+  },
+  {
+    "id": "conf-005",
+    "name": "Single Molecule Biophysics Workshop",
+    "field": "Biophysics",
+    "topics": "single-molecule imaging, FRET, optical tweezers, super-resolution microscopy",
+    "location": "Cambridge, UK",
+    "start_date": "2026-11-09",
+    "end_date": "2026-11-11",
+    "submission_deadline": "2026-08-01",
+    "url": "https://example.org/smb-workshop2026"
+  },
+  {
+    "id": "conf-006",
     "name": "NeurIPS",
     "field": "Machine Learning",
     "topics": "deep learning, neural networks, reinforcement learning, generative models, optimization",
@@ -22,7 +66,106 @@
     "url": "https://example.org/neurips2026"
   },
   {
-    "id": "conf-003",
+    "id": "conf-007",
+    "name": "International Conference on Machine Learning (ICML)",
+    "field": "Machine Learning",
+    "topics": "supervised learning, representation learning, transformers, optimization theory, generative models",
+    "location": "Vienna, Austria",
+    "start_date": "2026-07-19",
+    "end_date": "2026-07-25",
+    "submission_deadline": "2026-01-23",
+    "url": "https://example.org/icml2026"
+  },
+  {
+    "id": "conf-008",
+    "name": "International Conference on Learning Representations (ICLR)",
+    "field": "Machine Learning",
+    "topics": "deep learning, representation learning, self-supervised learning, generative models, transformers",
+    "location": "Singapore",
+    "start_date": "2027-04-26",
+    "end_date": "2027-04-30",
+    "submission_deadline": "2026-09-25",
+    "url": "https://example.org/iclr2027"
+  },
+  {
+    "id": "conf-009",
+    "name": "AAAI Conference on Artificial Intelligence",
+    "field": "Machine Learning",
+    "topics": "artificial intelligence, reasoning, knowledge representation, planning, multi-agent systems",
+    "location": "Singapore",
+    "start_date": "2027-01-20",
+    "end_date": "2027-01-27",
+    "submission_deadline": "2026-08-15",
+    "url": "https://example.org/aaai2027"
+  },
+  {
+    "id": "conf-010",
+    "name": "Conference on Uncertainty in Artificial Intelligence (UAI)",
+    "field": "Machine Learning",
+    "topics": "probabilistic graphical models, Bayesian inference, causal inference, uncertainty quantification",
+    "location": "Amsterdam, Netherlands",
+    "start_date": "2026-08-04",
+    "end_date": "2026-08-08",
+    "submission_deadline": "2026-03-05",
+    "url": "https://example.org/uai2026"
+  },
+  {
+    "id": "conf-011",
+    "name": "American Chemical Society National Meeting",
+    "field": "Chemistry",
+    "topics": "organic synthesis, catalysis, materials chemistry, polymer chemistry, medicinal chemistry",
+    "location": "New Orleans, LA, USA",
+    "start_date": "2026-08-16",
+    "end_date": "2026-08-20",
+    "submission_deadline": "2026-04-01",
+    "url": "https://example.org/acs-fall2026"
+  },
+  {
+    "id": "conf-012",
+    "name": "International Symposium on Green Chemistry",
+    "field": "Chemistry",
+    "topics": "green chemistry, sustainable catalysis, renewable feedstocks, environmentally benign synthesis",
+    "location": "La Rochelle, France",
+    "start_date": "2027-05-03",
+    "end_date": "2027-05-07",
+    "submission_deadline": "2026-12-01",
+    "url": "https://example.org/isgc2027"
+  },
+  {
+    "id": "conf-013",
+    "name": "Gordon Research Conference on Physical Organic Chemistry",
+    "field": "Chemistry",
+    "topics": "reaction mechanisms, physical organic chemistry, computational chemistry, kinetics",
+    "location": "Newport, RI, USA",
+    "start_date": "2026-06-21",
+    "end_date": "2026-06-26",
+    "submission_deadline": "2026-02-01",
+    "url": "https://example.org/grc-poc2026"
+  },
+  {
+    "id": "conf-014",
+    "name": "International Conference on Materials Chemistry",
+    "field": "Chemistry",
+    "topics": "nanomaterials, materials chemistry, energy storage materials, self-assembly, polymer chemistry",
+    "location": "Manchester, UK",
+    "start_date": "2026-07-13",
+    "end_date": "2026-07-16",
+    "submission_deadline": "2026-03-01",
+    "url": "https://example.org/matchem2026"
+  },
+  {
+    "id": "conf-015",
+    "name": "Electrochemical Society Meeting",
+    "field": "Chemistry",
+    "topics": "electrochemistry, battery materials, fuel cells, corrosion science, electrocatalysis",
+    "location": "Chicago, IL, USA",
+    "start_date": "2026-10-04",
+    "end_date": "2026-10-08",
+    "submission_deadline": "2026-05-01",
+    "url": "https://example.org/ecs2026"
+  },
+  {
+    "id": "conf-016",
     "name": "Society for Neuroscience Annual Meeting",
     "field": "Neuroscience",
     "topics": "synaptic plasticity, neural circuits, cognitive neuroscience, brain imaging, neurodegeneration",
@@ -31,5 +174,49 @@
     "end_date": "2026-10-14",
     "submission_deadline": "2026-07-01",
     "url": "https://example.org/sfn2026"
+  },
+  {
+    "id": "conf-017",
+    "name": "Federation of European Neuroscience Societies Forum",
+    "field": "Neuroscience",
+    "topics": "neural circuits, computational neuroscience, neurodevelopment, glial biology, sensory processing",
+    "location": "Barcelona, Spain",
+    "start_date": "2027-06-27",
+    "end_date": "2027-07-01",
+    "submission_deadline": "2027-01-15",
+    "url": "https://example.org/fens2027"
+  },
+  {
+    "id": "conf-018",
+    "name": "Cognitive Neuroscience Society Annual Meeting",
+    "field": "Neuroscience",
+    "topics": "cognitive neuroscience, brain imaging, fMRI, memory, attention, decision making",
+    "location": "New York, NY, USA",
+    "start_date": "2027-03-20",
+    "end_date": "2027-03-23",
+    "submission_deadline": "2026-11-15",
+    "url": "https://example.org/cns2027"
+  },
+  {
+    "id": "conf-019",
+    "name": "International Conference on Computational Neuroscience",
+    "field": "Neuroscience",
+    "topics": "computational neuroscience, neural circuits, spiking neural networks, brain modeling",
+    "location": "Prague, Czech Republic",
+    "start_date": "2026-07-18",
+    "end_date": "2026-07-22",
+    "submission_deadline": "2026-04-15",
+    "url": "https://example.org/cns-comp2026"
+  },
+  {
+    "id": "conf-020",
+    "name": "Alzheimer's Association International Conference",
+    "field": "Neuroscience",
+    "topics": "neurodegeneration, Alzheimer's disease, dementia, biomarkers, brain imaging",
+    "location": "Toronto, Canada",
+    "start_date": "2026-07-27",
+    "end_date": "2026-07-31",
+    "submission_deadline": "2026-02-15",
+    "url": "https://example.org/aaic2026"
   }
 ]
