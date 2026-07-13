@@ -8,12 +8,12 @@ Run the backend first (`uvicorn app:app --port 8000` from backend/), then
 `python app.py` here.
 """
 import html
+from difflib import SequenceMatcher
 
 import gradio as gr
 import requests
 
 BASE_URL = "http://localhost:8000"
-ANY_FIELD = "(Any field)"
 PAGE_SIZE = 10
 
 # A rotating palette for the score bubbles / field chips — purely decorative.
@@ -29,8 +29,7 @@ PALETTE = [
 def fetch_fields():
     resp = requests.get(f"{BASE_URL}/fields", timeout=5)
     resp.raise_for_status()
-    choices = [ANY_FIELD] + resp.json()["fields"]
-    return gr.update(choices=choices, value=ANY_FIELD)
+    return gr.update(choices=resp.json()["fields"], value=None)
 
 
 def _as_date_str(value) -> str | None:
@@ -56,6 +55,26 @@ def _filter_by_date(results: list[dict], date_from, date_to) -> list[dict]:
     return out
 
 
+def _word_matches(query_word: str, speaker_word: str) -> bool:
+    """Loose match: substring either way, or close enough to tolerate typos."""
+    if query_word in speaker_word or speaker_word in query_word:
+        return True
+    return SequenceMatcher(None, query_word, speaker_word).ratio() >= 0.75
+
+
+def _filter_by_keynote(results: list[dict], keynote_query: str) -> list[dict]:
+    query_words = (keynote_query or "").strip().lower().split()
+    if not query_words:
+        return results
+    out = []
+    for r in results:
+        speakers = r.get("keynote_speakers") or []
+        speaker_words = " ".join(speakers).lower().split()
+        if all(any(_word_matches(qw, sw) for sw in speaker_words) for qw in query_words):
+            out.append(r)
+    return out
+
+
 def _bubble_card(result: dict, index: int) -> str:
     c1, c2 = PALETTE[index % len(PALETTE)]
     name = html.escape(result["name"])
@@ -65,19 +84,35 @@ def _bubble_card(result: dict, index: int) -> str:
     score_pct = round(result["score"] * 100)
     delay = min(index * 0.05, 0.5)
 
+    description_html = ""
+    description = (result.get("description") or "").strip()
+    if description:
+        if len(description) > 220:
+            description = description[:220].rsplit(" ", 1)[0] + "…"
+        description_html = f'<div class="result-desc">{html.escape(description)}</div>'
+
+    keynote_html = ""
+    speakers = [s for s in (result.get("keynote_speakers") or []) if s]
+    if speakers:
+        speakers_text = html.escape(", ".join(speakers))
+        keynote_html = f'<div class="side-line">🎤 {speakers_text}</div>'
+
     return f"""
     <div class="result-bubble" style="animation-delay:{delay}s">
-      <div class="score-bubble" style="background: linear-gradient(135deg, {c1}, {c2});">
-        {score_pct}%
-      </div>
       <div class="result-main">
         <a class="result-title" href="{url}" target="_blank" rel="noopener noreferrer">{name}</a>
         <span class="chip-tag" style="background: linear-gradient(135deg, {c1}22, {c2}22); color:{c1};">{field}</span>
+        {description_html}
       </div>
       <div class="result-side">
         <div class="side-line">📍 {location}</div>
         <div class="side-line">🗓️ {result['start_date']} – {result['end_date']}</div>
         <div class="side-line side-deadline">⏳ submit by {result['submission_deadline']}</div>
+        {keynote_html}
+      </div>
+      <div class="score-meter" title="Relevance score">
+        <div class="score-track"><div class="score-fill" style="width:{score_pct}%; background: linear-gradient(90deg, {c1}, {c2});"></div></div>
+        <span class="score-label" style="color:{c1};">{score_pct}%</span>
       </div>
     </div>
     """
@@ -96,9 +131,9 @@ def _status_text(shown: int, total: int) -> str:
     return f'<div class="status-text">Showing {shown} of {total} matching conferences</div>'
 
 
-def run_search(field: str, query: str, date_from, date_to):
+def run_search(field: str, query: str, date_from, date_to, keynote_query: str):
     params = {}
-    if field and field != ANY_FIELD:
+    if field:
         params["field"] = field
     if query:
         params["query"] = query
@@ -111,6 +146,7 @@ def run_search(field: str, query: str, date_from, date_to):
         return [], 0, "", error_html, gr.update(visible=False)
 
     results = _filter_by_date(resp.json()["results"], date_from, date_to)
+    results = _filter_by_keynote(results, keynote_query)
     shown = min(PAGE_SIZE, len(results))
     return (
         results,
@@ -132,16 +168,10 @@ def show_more(results: list[dict], shown: int):
 
 
 def clear_filters():
-    return ANY_FIELD, None, None
+    return None, None, None, ""
 
 
 BUBBLE_CSS = """
-@keyframes float {
-  0%   { transform: translate(0, 0) scale(1); }
-  33%  { transform: translate(20px, -40px) scale(1.08); }
-  66%  { transform: translate(-25px, 25px) scale(0.94); }
-  100% { transform: translate(0, 0) scale(1); }
-}
 @keyframes pop-in {
   from { opacity: 0; transform: translateY(14px) scale(0.94); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
@@ -172,22 +202,6 @@ BUBBLE_CSS = """
   overflow-x: hidden;
 }
 
-/* Decorative floating bubbles, purely cosmetic, non-interactive */
-.bubble-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-.bubble-bg span {
-  position: absolute; border-radius: 50%; opacity: 0.28; filter: blur(1px);
-  animation: float ease-in-out infinite;
-  background: linear-gradient(135deg, var(--c1), var(--c2));
-}
-.bubble-bg span:nth-child(1) { width: 140px; height: 140px; left: 6%;  top: 12%; --c1:#6366f1; --c2:#8b5cf6; animation-duration: 16s; }
-.bubble-bg span:nth-child(2) { width: 90px;  height: 90px;  left: 82%; top: 18%; --c1:#ec4899; --c2:#f472b6; animation-duration: 13s; animation-delay: -3s; }
-.bubble-bg span:nth-child(3) { width: 60px;  height: 60px;  left: 70%; top: 68%; --c1:#06b6d4; --c2:#3b82f6; animation-duration: 11s; animation-delay: -6s; }
-.bubble-bg span:nth-child(4) { width: 110px; height: 110px; left: 12%; top: 72%; --c1:#f59e0b; --c2:#f97316; animation-duration: 18s; animation-delay: -2s; }
-.bubble-bg span:nth-child(5) { width: 45px;  height: 45px;  left: 45%; top: 8%;  --c1:#10b981; --c2:#22c55e; animation-duration: 9s;  animation-delay: -4s; }
-.bubble-bg span:nth-child(6) { width: 75px;  height: 75px;  left: 35%; top: 85%; --c1:#8b5cf6; --c2:#ec4899; animation-duration: 14s; animation-delay: -7s; }
-
-.gradio-container > .main, .gradio-container .contain { position: relative; z-index: 1; }
-
 #app-title {
   text-align: center;
   font-size: 2.75rem;
@@ -205,25 +219,30 @@ BUBBLE_CSS = """
 /* Filters panel */
 .filters-panel {
   background: #ffffff !important;
-  border-radius: 26px !important;
+  border-radius: 16px !important;
   border: none !important;
-  box-shadow: 0 8px 24px rgba(99,102,241,.10);
-  padding: 20px 22px !important;
+  box-shadow: 0 4px 14px rgba(99,102,241,.08);
+  padding: 12px 16px !important;
+  --layout-gap: 6px !important;
+  --form-gap-width: 4px !important;
+  gap: 6px !important;
 }
-#filters-title, #filters-title * { color: #312e81 !important; font-weight: 700 !important; font-size: 1.05rem !important; margin: 0 0 10px 0 !important; }
-.filters-panel label span { color: #4b5563 !important; }
+#filters-title, #filters-title * { color: #312e81 !important; font-weight: 700 !important; font-size: 0.85rem !important; margin: 0 0 4px 0 !important; }
+.filters-panel label span { color: #4b5563 !important; font-size: 0.82rem !important; }
+.filters-panel .block { padding-top: 0 !important; padding-bottom: 0 !important; }
 
 /* Field picker rendered as pill-shaped bubble chips */
-.bubble-radio .wrap { display: flex !important; flex-wrap: wrap; gap: 10px; background: none !important; border: none !important; box-shadow: none !important; }
+.bubble-radio .wrap { display: flex !important; flex-wrap: wrap; gap: 6px; background: none !important; border: none !important; box-shadow: none !important; }
 .bubble-radio label {
   border-radius: 999px !important;
-  padding: 9px 20px !important;
+  padding: 5px 14px !important;
   margin: 0 !important;
-  border: 2px solid #e5e0fa !important;
+  border: 1.5px solid #e5e0fa !important;
   background: #ffffff !important;
   color: #312e81 !important;
   cursor: pointer;
   font-weight: 600;
+  font-size: 0.82rem;
   transition: transform .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease;
 }
 .bubble-radio label * { color: inherit !important; }
@@ -240,15 +259,16 @@ BUBBLE_CSS = """
 .bubble-input textarea, .bubble-input input,
 .bubble-date input {
   border-radius: 999px !important;
-  padding: 12px 22px !important;
-  border: 2px solid #e5e0fa !important;
+  padding: 8px 16px !important;
+  border: 1.5px solid #e5e0fa !important;
   background: #ffffff !important;
   color: #1f2937 !important;
+  font-size: 0.88rem !important;
   transition: box-shadow .18s ease, border-color .18s ease;
 }
 .bubble-input textarea:focus, .bubble-input input:focus, .bubble-date input:focus {
   border-color: #a5b4fc !important;
-  box-shadow: 0 0 0 4px rgba(139,92,246,.18) !important;
+  box-shadow: 0 0 0 3px rgba(139,92,246,.18) !important;
 }
 
 /* Round gradient search button */
@@ -258,18 +278,21 @@ BUBBLE_CSS = """
   background: linear-gradient(135deg, #6366f1, #ec4899) !important;
   color: #ffffff !important;
   font-weight: 700 !important;
-  padding: 12px 34px !important;
+  padding: 8px 22px !important;
+  font-size: 0.88rem !important;
   transition: transform .18s ease, box-shadow .18s ease;
-  box-shadow: 0 10px 24px rgba(99,102,241,.3);
+  box-shadow: 0 6px 16px rgba(99,102,241,.25);
 }
-#search-btn:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 14px 30px rgba(99,102,241,.4); }
+#search-btn:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 10px 22px rgba(99,102,241,.35); }
 
 #clear-btn {
   border-radius: 999px !important;
-  border: 2px solid #e5e0fa !important;
+  border: 1.5px solid #e5e0fa !important;
   background: #ffffff !important;
   color: #4b5563 !important;
   font-weight: 600 !important;
+  font-size: 0.82rem !important;
+  padding: 6px 16px !important;
 }
 #clear-btn:hover { border-color: #c7b9f7 !important; color: #312e81 !important; }
 
@@ -296,23 +319,22 @@ BUBBLE_CSS = """
   transition: transform .18s ease, box-shadow .18s ease;
 }
 .result-bubble:hover { transform: translateY(-4px); box-shadow: 0 14px 32px rgba(99,102,241,.2); }
-.score-bubble {
-  flex: 0 0 auto; width: 56px; height: 56px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  color: #ffffff; font-weight: 800; font-size: 0.95rem;
-  box-shadow: 0 6px 14px rgba(0,0,0,.15);
-}
 .result-main { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
 .result-title { font-size: 1.15rem; font-weight: 700; text-decoration: none; color: #312e81; }
 .result-title:hover { text-decoration: underline; }
 .chip-tag { align-self: flex-start; border-radius: 999px; padding: 3px 12px; font-size: 0.8rem; font-weight: 700; }
+.result-desc { font-size: 0.88rem; color: #4b5563; line-height: 1.45; }
 .result-side {
   flex: 0 0 auto; text-align: right; padding-left: 18px;
-  border-left: 2px solid #f1eefc; min-width: 190px;
+  border-left: 2px solid #f1eefc; max-width: 240px;
   display: flex; flex-direction: column; gap: 4px;
 }
-.side-line { font-size: 0.85rem; color: #4b5563; white-space: nowrap; }
+.side-line { font-size: 0.85rem; color: #4b5563; white-space: normal; }
 .side-deadline { color: #9333ea; font-weight: 600; }
+.score-meter { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; gap: 5px; width: 60px; }
+.score-track { width: 100%; height: 6px; border-radius: 999px; background: #f1eefc; overflow: hidden; }
+.score-fill { height: 100%; border-radius: 999px; transition: width .4s ease; }
+.score-label { font-size: 0.78rem; font-weight: 700; }
 .empty-bubble {
   text-align: center; padding: 30px; border-radius: 26px; background: #ffffff;
   box-shadow: 0 8px 24px rgba(99,102,241,.12); font-size: 1.05rem; color: #4b5563;
@@ -324,11 +346,6 @@ BUBBLE_CSS = """
 }
 """
 
-BUBBLE_BG_HTML = (
-    '<div class="bubble-bg"><span></span><span></span><span></span>'
-    "<span></span><span></span><span></span></div>"
-)
-
 # Prevent the browser's dark-mode preference from swapping in Gradio's dark
 # theme colors, which otherwise clashes with our fixed light-themed CSS.
 FORCE_LIGHT_JS = """
@@ -339,7 +356,6 @@ FORCE_LIGHT_JS = """
 """
 
 with gr.Blocks(title="Conference Finder") as demo:
-    gr.HTML(BUBBLE_BG_HTML)
     gr.Markdown("# Conference Finder", elem_id="app-title")
     gr.Markdown(
         "Pick a broad scientific field and/or describe your research to "
@@ -350,7 +366,7 @@ with gr.Blocks(title="Conference Finder") as demo:
     with gr.Group(elem_classes=["filters-panel"]):
         gr.Markdown("🔎 Filters", elem_id="filters-title")
         field_radio = gr.Radio(
-            choices=[ANY_FIELD], value=ANY_FIELD, label="Field", elem_classes=["bubble-radio"]
+            choices=[], value=None, label="Field", elem_classes=["bubble-radio"]
         )
         with gr.Row():
             date_from = gr.DateTime(
@@ -370,6 +386,11 @@ with gr.Blocks(title="Conference Finder") as demo:
             placeholder="e.g. protein folding simulations",
             elem_classes=["bubble-input"],
         )
+        keynote_box = gr.Textbox(
+            label="Keynote speaker",
+            placeholder="e.g. Yoshua Bengio",
+            elem_classes=["bubble-input"],
+        )
         with gr.Row():
             clear_btn = gr.Button("Clear filters", elem_id="clear-btn", size="sm")
             search_btn = gr.Button("✨ Search", variant="primary", elem_id="search-btn")
@@ -382,18 +403,19 @@ with gr.Blocks(title="Conference Finder") as demo:
     shown_state = gr.State(0)
 
     search_outputs = [results_state, shown_state, status_md, results_html, load_more_btn]
-    search_inputs = [field_radio, query_box, date_from, date_to]
+    search_inputs = [field_radio, query_box, date_from, date_to, keynote_box]
 
     demo.load(fn=fetch_fields, outputs=field_radio)
     search_btn.click(fn=run_search, inputs=search_inputs, outputs=search_outputs)
     query_box.submit(fn=run_search, inputs=search_inputs, outputs=search_outputs)
+    keynote_box.submit(fn=run_search, inputs=search_inputs, outputs=search_outputs)
     load_more_btn.click(
         fn=show_more,
         inputs=[results_state, shown_state],
         outputs=[shown_state, status_md, results_html, load_more_btn],
     )
     clear_btn.click(
-        fn=clear_filters, outputs=[field_radio, date_from, date_to]
+        fn=clear_filters, outputs=[field_radio, date_from, date_to, keynote_box]
     ).then(fn=run_search, inputs=search_inputs, outputs=search_outputs)
 
 if __name__ == "__main__":
