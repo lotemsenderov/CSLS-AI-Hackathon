@@ -2,3 +2,5 @@ fastapi
 uvicorn[standard]
 scikit-learn
 pytest
+requests
+pyyaml

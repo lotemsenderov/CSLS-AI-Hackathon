@@ -5,13 +5,15 @@ broad scientific field (dropdown) and/or a free-text description of their
 research against a set of conferences.
 
 Start here:
+
 - [PLAN.md](PLAN.md) — architecture, tech stack, database design, timeline.
 - [SKILLS.md](SKILLS.md) — modular skills, one per teammate/branch.
 - [API_CONTRACT.md](API_CONTRACT.md) — the request/response shapes shared
   between the frontend and backend.
 
 ## Layout
-```
+
+```text
 backend/   FastAPI app + matching logic (Search Engine module)
 frontend/  React (Vite) UI
 data/      Static seed dataset used as the "database" for the MVP
@@ -25,15 +27,33 @@ check with `python3 --version` before you start, especially on Windows
 where the default install can be older).
 
 Backend:
-```
+
+```bash
 cd backend
 pip install -r requirements.txt
 uvicorn app:app --reload --port 8000
 ```
 
 Frontend:
-```
+
+```bash
 cd frontend
 npm install
 npm run dev
+```
+
+Run the tests:
+
+```bash
+cd backend
+pytest
+```
+
+Pull in more real conferences (currently ML/AI only, from the public
+`paperswithcode/ai-deadlines` dataset — see `backend/scraper.py` for
+caveats):
+
+```bash
+cd backend
+python scraper.py
 ```
