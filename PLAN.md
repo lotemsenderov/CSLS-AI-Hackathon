@@ -80,7 +80,8 @@ cycle — this is a hackathon-speed exception, not a general practice.
 
 ## Post-hackathon roadmap (not in scope now)
 - Replace TF-IDF with real embeddings (sentence-transformers / LLM API).
-- Add a live scraper per conference-listing source, normalizing into the
-  same schema, running on a schedule.
+- Add scraper sources for Biophysics/Chemistry/Neuroscience (currently
+  `backend/scraper.py` only covers ML/AI, via `paperswithcode/ai-deadlines`)
+  and run it on a schedule instead of on demand.
 - Move `conferences.json` into Postgres.
 - Pagination, auth, saved searches, deployment.

@@ -15,7 +15,7 @@ one clear file to own. Pick your skill, branch off `main` as
 | 4 | **Semantic Text Matcher** — TF-IDF/cosine ranking of free text vs. each conference's `topics`. Upgrade path: swap in `sentence-transformers` or an LLM embeddings call later, same function signature. | `backend/search.py` | `feature/matching-logic` |
 | 5 | **Result Ranker/Merger** — combines the field filter and the semantic score into one ranked list. | `backend/search.py` | `feature/matching-logic` |
 | 6 | **API Layer** — FastAPI `/search` and `/fields` endpoints, request validation, CORS. | `backend/app.py` | `feature/api` |
-| 7 | *(Stretch/future — not in the 1-hr MVP)* **Live Scraper** — a real scraper per conference-listing site, normalizing results into the schema above. | `backend/scraper.py` (not created yet) | `feature/scraper` |
+| 7 | **Live Scraper** — pulls real conferences from an external source, normalizes into the schema above, and merges (deduped by id) into `data/conferences.json`. Currently sources from the public `paperswithcode/ai-deadlines` dataset (ML/AI conferences only — see caveat in the file's docstring: that source is stale, dated 2020-2025). Extending to other fields means adding a source + a `normalize()`-equivalent per site. | `backend/scraper.py` | `feature/scraper` |
 
 Skills 1-2 and 3-5 are small enough that one person can usually cover both
 in their pair (e.g. one person does data + taxonomy, another does the three
