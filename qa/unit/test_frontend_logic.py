@@ -59,14 +59,14 @@ def _conference(**overrides):
 
 # --- fetch_fields ----------------------------------------------------------
 
-def test_fetch_fields_prepends_any_field_option(frontend_app, monkeypatch):
+def test_fetch_fields_returns_choices_with_no_default_selected(frontend_app, monkeypatch):
     monkeypatch.setattr(
         frontend_app.requests, "get",
         lambda *a, **kw: FakeResponse({"fields": ["Chemistry", "Neuroscience"]}),
     )
     result = frontend_app.fetch_fields()
-    assert result["choices"] == ["(Any field)", "Chemistry", "Neuroscience"]
-    assert result["value"] == "(Any field)"
+    assert result["choices"] == ["Chemistry", "Neuroscience"]
+    assert result["value"] is None
 
 
 # --- _filter_by_date ---------------------------------------------------------
@@ -112,7 +112,7 @@ def test_status_text_reports_shown_and_total(frontend_app):
 
 # --- run_search: request building -------------------------------------------
 
-def test_run_search_omits_field_param_when_any_field_selected(frontend_app, monkeypatch):
+def test_run_search_omits_field_param_when_no_field_selected(frontend_app, monkeypatch):
     captured = {}
 
     def fake_get(url, params=None, timeout=None):
@@ -120,7 +120,7 @@ def test_run_search_omits_field_param_when_any_field_selected(frontend_app, monk
         return FakeResponse({"results": []})
 
     monkeypatch.setattr(frontend_app.requests, "get", fake_get)
-    frontend_app.run_search("(Any field)", "protein folding", None, None)
+    frontend_app.run_search(None, "protein folding", None, None, "")
     assert "field" not in captured
     assert captured["query"] == "protein folding"
 
@@ -133,7 +133,7 @@ def test_run_search_omits_query_param_when_blank(frontend_app, monkeypatch):
         return FakeResponse({"results": []})
 
     monkeypatch.setattr(frontend_app.requests, "get", fake_get)
-    frontend_app.run_search("Chemistry", "", None, None)
+    frontend_app.run_search("Chemistry", "", None, None, "")
     assert captured == {"field": "Chemistry"}
 
 
@@ -146,7 +146,7 @@ def test_run_search_paginates_to_page_size(frontend_app, monkeypatch):
         lambda *a, **kw: FakeResponse({"results": fifteen_results}),
     )
     results, shown, status_html, cards_html, load_more_update = frontend_app.run_search(
-        "(Any field)", "", None, None
+        None, "", None, None, ""
     )
     assert len(results) == 15
     assert shown == frontend_app.PAGE_SIZE == 10
@@ -160,7 +160,7 @@ def test_run_search_hides_load_more_when_all_results_shown(frontend_app, monkeyp
         frontend_app.requests, "get",
         lambda *a, **kw: FakeResponse({"results": three_results}),
     )
-    _, shown, _, _, load_more_update = frontend_app.run_search("(Any field)", "", None, None)
+    _, shown, _, _, load_more_update = frontend_app.run_search(None, "", None, None, "")
     assert shown == 3
     assert load_more_update == {"visible": False}
 
@@ -175,7 +175,7 @@ def test_run_search_applies_date_filter_before_paginating(frontend_app, monkeypa
         lambda *a, **kw: FakeResponse({"results": results}),
     )
     filtered, shown, status_html, _, _ = frontend_app.run_search(
-        "(Any field)", "", "2026-06-01", None
+        None, "", "2026-06-01", None, ""
     )
     assert [r["id"] for r in filtered] == ["late"]
     assert shown == 1
@@ -190,7 +190,7 @@ def test_run_search_network_error_returns_empty_state(frontend_app, monkeypatch)
 
     monkeypatch.setattr(frontend_app.requests, "get", raise_error)
     results, shown, status_html, cards_html, load_more_update = frontend_app.run_search(
-        "(Any field)", "catalysis", None, None
+        None, "catalysis", None, None, ""
     )
     assert results == []
     assert shown == 0
@@ -198,6 +198,22 @@ def test_run_search_network_error_returns_empty_state(frontend_app, monkeypatch)
     assert "Error contacting backend" in cards_html
     assert "connection refused" in cards_html
     assert load_more_update == {"visible": False}
+
+
+def test_run_search_applies_keynote_filter(frontend_app, monkeypatch):
+    results = [
+        _conference(id="has-speaker", keynote_speakers=["Yoshua Bengio"]),
+        _conference(id="no-speaker", keynote_speakers=["Someone Else"]),
+    ]
+    monkeypatch.setattr(
+        frontend_app.requests, "get",
+        lambda *a, **kw: FakeResponse({"results": results}),
+    )
+    filtered, shown, status_html, _, _ = frontend_app.run_search(
+        None, "", None, None, "bengio"
+    )
+    assert [r["id"] for r in filtered] == ["has-speaker"]
+    assert shown == 1
 
 
 # --- show_more ---------------------------------------------------------------
@@ -219,5 +235,55 @@ def test_show_more_caps_at_total_results(frontend_app):
 
 # --- clear_filters -------------------------------------------------------------
 
-def test_clear_filters_resets_field_and_dates(frontend_app):
-    assert frontend_app.clear_filters() == (frontend_app.ANY_FIELD, None, None)
+def test_clear_filters_resets_field_dates_and_keynote(frontend_app):
+    assert frontend_app.clear_filters() == (None, None, None, "")
+
+
+# --- _filter_by_keynote ------------------------------------------------------
+
+def test_filter_by_keynote_blank_query_returns_all(frontend_app):
+    results = [_conference(keynote_speakers=["Ada Lovelace"])]
+    assert frontend_app._filter_by_keynote(results, "") == results
+
+
+def test_filter_by_keynote_matches_case_insensitively(frontend_app):
+    results = [_conference(id="a", keynote_speakers=["Yoshua Bengio"])]
+    assert [r["id"] for r in frontend_app._filter_by_keynote(results, "BENGIO")] == ["a"]
+
+
+def test_filter_by_keynote_tolerates_typos(frontend_app):
+    results = [_conference(id="a", keynote_speakers=["Yoshua Bengio"])]
+    assert [r["id"] for r in frontend_app._filter_by_keynote(results, "bengoi")] == ["a"]
+
+
+def test_filter_by_keynote_ignores_word_order(frontend_app):
+    results = [_conference(id="a", keynote_speakers=["Yann LeCun"])]
+    assert [r["id"] for r in frontend_app._filter_by_keynote(results, "lecun yann")] == ["a"]
+
+
+def test_filter_by_keynote_excludes_conferences_without_matching_speaker(frontend_app):
+    results = [_conference(id="a", keynote_speakers=["Someone Else"])]
+    assert frontend_app._filter_by_keynote(results, "bengio") == []
+
+
+def test_filter_by_keynote_excludes_conferences_with_no_speakers_field(frontend_app):
+    results = [_conference(id="a")]
+    assert frontend_app._filter_by_keynote(results, "bengio") == []
+
+
+# --- card rendering: description and keynote speakers -------------------------
+
+def test_render_cards_includes_description_when_present(frontend_app):
+    html = frontend_app._render_cards([_conference(description="A workshop on catalysis.")])
+    assert "A workshop on catalysis." in html
+
+
+def test_render_cards_includes_keynote_speakers_when_present(frontend_app):
+    html = frontend_app._render_cards([_conference(keynote_speakers=["Ada Lovelace", "Alan Turing"])])
+    assert "Ada Lovelace" in html
+    assert "Alan Turing" in html
+
+
+def test_render_cards_omits_description_and_keynote_blocks_when_absent(frontend_app):
+    html = frontend_app._render_cards([_conference()])
+    assert "result-desc" not in html
