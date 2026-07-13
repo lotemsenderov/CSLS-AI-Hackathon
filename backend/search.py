@@ -15,7 +15,7 @@ DATA_PATH = Path(__file__).parent.parent / "data" / "conferences.json"
 
 
 def load_conferences() -> list[dict]:
-    with open(DATA_PATH) as f:
+    with open(DATA_PATH, encoding="utf-8") as f:
         return json.load(f)
 
 

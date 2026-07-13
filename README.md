@@ -19,6 +19,11 @@ data/      Static seed dataset used as the "database" for the MVP
 
 ## Quickstart (once your skill's stub is filled in)
 
+Requires **Python 3.10+** (the backend uses `str | None` / `list[dict]`
+type-hint syntax, which is a hard requirement on older interpreters —
+check with `python3 --version` before you start, especially on Windows
+where the default install can be older).
+
 Backend:
 ```
 cd backend
