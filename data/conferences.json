@@ -2253,5 +2253,192 @@
     "end_date": "2024-09-12",
     "submission_deadline": "2024-02-29",
     "url": "https://2024.automl.cc/"
+  },
+  {
+    "id": "conf-021",
+    "name": "IUPAB Congress (International Union for Pure and Applied Biophysics)",
+    "field": "Biophysics",
+    "topics": "biophysics, molecular biophysics, biomolecular structure, membrane biophysics, bioenergetics",
+    "location": "Kyoto, Japan",
+    "start_date": "2026-11-16",
+    "end_date": "2026-11-20",
+    "submission_deadline": "2026-06-15",
+    "url": "https://example.org/iupab2026"
+  },
+  {
+    "id": "conf-022",
+    "name": "Keystone Symposium: Molecular Machines and Cellular Biophysics",
+    "field": "Biophysics",
+    "topics": "molecular machines, motor proteins, cellular biophysics, cryo-EM, structural dynamics",
+    "location": "Keystone, CO, USA",
+    "start_date": "2027-02-08",
+    "end_date": "2027-02-12",
+    "submission_deadline": "2026-10-15",
+    "url": "https://example.org/keystone-molmachines2027"
+  },
+  {
+    "id": "conf-023",
+    "name": "CCP4 Study Weekend",
+    "field": "Biophysics",
+    "topics": "X-ray crystallography, structural biology, macromolecular structure determination, software tools",
+    "location": "Nottingham, UK",
+    "start_date": "2027-01-06",
+    "end_date": "2027-01-08",
+    "submission_deadline": "2026-11-01",
+    "url": "https://example.org/ccp4-studyweekend2027"
+  },
+  {
+    "id": "conf-024",
+    "name": "American Crystallographic Association Annual Meeting",
+    "field": "Biophysics",
+    "topics": "crystallography, structural biology, diffraction methods, protein structure, small-molecule structure",
+    "location": "Denver, CO, USA",
+    "start_date": "2026-07-25",
+    "end_date": "2026-07-29",
+    "submission_deadline": "2026-04-01",
+    "url": "https://example.org/aca2026"
+  },
+  {
+    "id": "conf-025",
+    "name": "Gordon Research Conference on Molecular & Cellular Biophysics",
+    "field": "Biophysics",
+    "topics": "membrane biophysics, protein dynamics, molecular simulation, biophysical chemistry, cellular biophysics",
+    "location": "Galveston, TX, USA",
+    "start_date": "2027-02-21",
+    "end_date": "2027-02-26",
+    "submission_deadline": "2026-12-01",
+    "url": "https://example.org/grc-mcb2027"
+  },
+  {
+    "id": "conf-026",
+    "name": "Biophysical Society Thematic Meeting: Molecular Motors",
+    "field": "Biophysics",
+    "topics": "molecular motors, cytoskeletal dynamics, ATP-driven transport, single-molecule biophysics",
+    "location": "Berlin, Germany",
+    "start_date": "2026-09-21",
+    "end_date": "2026-09-24",
+    "submission_deadline": "2026-05-15",
+    "url": "https://example.org/bps-thematic-motors2026"
+  },
+  {
+    "id": "conf-027",
+    "name": "FEBS Congress",
+    "field": "Biophysics",
+    "topics": "biochemistry, molecular biophysics, protein biochemistry, structural biology, enzymology",
+    "location": "Lisbon, Portugal",
+    "start_date": "2026-07-04",
+    "end_date": "2026-07-09",
+    "submission_deadline": "2026-02-15",
+    "url": "https://example.org/febs2026"
+  },
+  {
+    "id": "conf-028",
+    "name": "ISMB (Intelligent Systems for Molecular Biology)",
+    "field": "Computational Biology",
+    "topics": "computational biology, bioinformatics, genomics, sequence analysis, machine learning for biology",
+    "location": "Seattle, WA, USA",
+    "start_date": "2026-08-01",
+    "end_date": "2026-08-05",
+    "submission_deadline": "2026-03-01",
+    "url": "https://example.org/ismb2026"
+  },
+  {
+    "id": "conf-029",
+    "name": "ECCB (European Conference on Computational Biology)",
+    "field": "Computational Biology",
+    "topics": "computational biology, bioinformatics, systems biology, comparative genomics, network biology",
+    "location": "Dublin, Ireland",
+    "start_date": "2026-09-06",
+    "end_date": "2026-09-10",
+    "submission_deadline": "2026-04-15",
+    "url": "https://example.org/eccb2026"
+  },
+  {
+    "id": "conf-030",
+    "name": "RECOMB (Research in Computational Molecular Biology)",
+    "field": "Computational Biology",
+    "topics": "computational molecular biology, algorithms in bioinformatics, phylogenetics, structural bioinformatics, genomics",
+    "location": "Boston, MA, USA",
+    "start_date": "2027-04-18",
+    "end_date": "2027-04-21",
+    "submission_deadline": "2026-11-15",
+    "url": "https://example.org/recomb2027"
+  },
+  {
+    "id": "conf-031",
+    "name": "PSB (Pacific Symposium on Biocomputing)",
+    "field": "Computational Biology",
+    "topics": "biocomputing, translational bioinformatics, precision medicine, computational genomics, clinical informatics",
+    "location": "Waimea, HI, USA",
+    "start_date": "2027-01-05",
+    "end_date": "2027-01-09",
+    "submission_deadline": "2026-09-01",
+    "url": "https://example.org/psb2027"
+  },
+  {
+    "id": "conf-032",
+    "name": "WABI (Workshop on Algorithms in Bioinformatics)",
+    "field": "Computational Biology",
+    "topics": "algorithms, bioinformatics, sequence alignment, genome assembly, computational complexity in biology",
+    "location": "Barcelona, Spain",
+    "start_date": "2026-09-07",
+    "end_date": "2026-09-09",
+    "submission_deadline": "2026-05-20",
+    "url": "https://example.org/wabi2026"
+  },
+  {
+    "id": "conf-033",
+    "name": "CSHL Meeting: Biology of Genomes",
+    "field": "Computational Biology",
+    "topics": "genomics, comparative genomics, population genetics, functional genomics, sequencing technologies",
+    "location": "Cold Spring Harbor, NY, USA",
+    "start_date": "2027-05-11",
+    "end_date": "2027-05-15",
+    "submission_deadline": "2027-02-01",
+    "url": "https://example.org/cshl-biologyofgenomes2027"
+  },
+  {
+    "id": "conf-034",
+    "name": "ISCB Latin America (ISCB-LA SoIBio)",
+    "field": "Computational Biology",
+    "topics": "computational biology, bioinformatics, Latin American genomics, structural bioinformatics, systems biology",
+    "location": "Santiago, Chile",
+    "start_date": "2026-10-19",
+    "end_date": "2026-10-22",
+    "submission_deadline": "2026-07-01",
+    "url": "https://example.org/iscb-la2026"
+  },
+  {
+    "id": "conf-035",
+    "name": "Gordon Research Conference on Computational and Structural Biology",
+    "field": "Computational Biology",
+    "topics": "structural bioinformatics, molecular dynamics simulation, protein structure prediction, computational structural biology",
+    "location": "Ventura, CA, USA",
+    "start_date": "2027-03-14",
+    "end_date": "2027-03-19",
+    "submission_deadline": "2026-12-15",
+    "url": "https://example.org/grc-compstructbio2027"
+  },
+  {
+    "id": "conf-036",
+    "name": "International Conference on Systems Biology (ICSB)",
+    "field": "Computational Biology",
+    "topics": "systems biology, network modeling, quantitative biology, gene regulatory networks, computational modeling",
+    "location": "Copenhagen, Denmark",
+    "start_date": "2026-08-23",
+    "end_date": "2026-08-27",
+    "submission_deadline": "2026-05-01",
+    "url": "https://example.org/icsb2026"
+  },
+  {
+    "id": "conf-037",
+    "name": "ISCB Africa ASBCB Conference",
+    "field": "Computational Biology",
+    "topics": "computational biology, bioinformatics, genomics in Africa, capacity building, pathogen genomics",
+    "location": "Cape Town, South Africa",
+    "start_date": "2026-09-14",
+    "end_date": "2026-09-17",
+    "submission_deadline": "2026-06-01",
+    "url": "https://example.org/iscb-africa2026"
   }
 ]
